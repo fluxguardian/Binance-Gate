@@ -11,12 +11,16 @@ namespace Karkov
 {
     class Binance
     {
+        Dictionary<string, string> MarketPlace { get; set; }
+        //Dictionary<string, string> secondMarketPlace { get; set; }
         public HttpClient httpClient { get; set; }
         public string Token { get; set; } 
         public string SecretToken { get; set; } 
-        private string KrakenURL { get; set; }
         public Binance(string token, string secretToken)
         {
+            MarketPlace =
+            new Dictionary<string, string>();
+
             httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("apiKey", token);
             httpClient.DefaultRequestHeaders.Add("secretKey", secretToken);
@@ -30,39 +34,7 @@ namespace Karkov
             return json;
         }
 
-        public void ParseAPI(object url, out string[] linkList, out string[] nameList)
-        {
-            int size = GetSize(url);
-            int i = 0;
-
-            linkList = new string[size];
-            nameList = new string[size];
-
-            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(url))
-            {
-                var name = descriptor.Name;
-
-                if (name.EndsWith("BTC"))
-                {
-                    nameList[i] = descriptor.Name;
-                    linkList[i] = $"https://api.kraken.com/0/public/Ticker?pair={name}";
-                    i++;
-                }
-            }
-        }
-        public int GetSize(object url)
-        {
-            int size = 0;
-
-            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(url))
-            {
-                if (descriptor.Name.EndsWith("XBT"))
-                {
-                    size++;
-                }
-            }
-
-            return size;
-        }
+       
+       
     }
 }
